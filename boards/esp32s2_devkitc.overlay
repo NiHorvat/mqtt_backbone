@@ -1,0 +1,19 @@
+/{
+    aliases {
+        indicator-led = &pin13;
+        connected-led = &pin12;
+    };
+    pins {
+        compatible = "gpio-leds";
+        pin13: d13 {
+            gpios = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+        };
+        pin12: d12 {
+            gpios = <&gpio0 12 GPIO_ACTIVE_HIGH>;
+        };
+    };
+
+};
+&wifi {
+    status = "okay";
+};
