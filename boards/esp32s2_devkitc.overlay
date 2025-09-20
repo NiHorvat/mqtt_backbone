@@ -1,4 +1,7 @@
 /{
+    zephyr,user {
+        io-channels = <&adc0 0>;
+    };
     aliases {
         indicator-led = &pin13;
         connected-led = &pin12;
@@ -16,4 +19,18 @@
 };
 &wifi {
     status = "okay";
+};
+
+&adc0 {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	channel@0 {
+		reg = <0>;
+		zephyr,gain = "ADC_GAIN_1_4";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
 };

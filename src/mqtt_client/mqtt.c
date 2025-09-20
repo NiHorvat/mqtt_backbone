@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 
 #include "mqtt.h"
-#include "mqtt_interface.h"
+#include "mqtt_pub_cb.h"
 
 #define MQTT_CLIENT_ID          "board_1"
 
@@ -98,7 +98,7 @@ static void mqtt_evt_handler(struct mqtt_client *client,
 
 
 int mqtt_connect_to_broker(
-    const char* mqtt_broker_ip, 
+    char* mqtt_broker_ip, 
     int mqtt_broker_port,
     const char *username,
     const char *password
@@ -112,11 +112,9 @@ int mqtt_connect_to_broker(
     broker4->sin_family = AF_INET;
     broker4->sin_port = htons(mqtt_broker_port);
 
-    static const struct in_addr mqtt_ip_addr = {.s4_addr = {192,168,18,85}};
+    static struct in_addr mqtt_ip_addr;
+    net_addr_pton(AF_INET, mqtt_broker_ip, (void *)&mqtt_ip_addr);
     broker4->sin_addr = mqtt_ip_addr;
-
-    // net_addr_pton(AF_INET, mqtt_broker_ip, &mqtt_broker_ip_item);
-    
 
 
     /**
@@ -174,7 +172,7 @@ int mqtt_connect_to_broker(
     return 0;
 }
 
-int mqtt_publish_to_topic(const char *topic, const char *data){
+int mqtt_publish_to_topic(const char *topic, const char *data, int qos){
 
     const int topic_len = strlen(topic);
     const int data_len = strlen(data);
@@ -187,7 +185,7 @@ int mqtt_publish_to_topic(const char *topic, const char *data){
     };
 
     const struct mqtt_topic topic_item = {
-        .qos = MQTT_QOS_1_AT_LEAST_ONCE,
+        .qos = qos,
         .topic = topic_data,
     };
 
@@ -219,17 +217,20 @@ int mqtt_publish_to_topic(const char *topic, const char *data){
     }
 
 
+    if(qos){
+        int64_t start_time = k_uptime_get();
+        while (k_uptime_get() - start_time < MQTT_PUB_ACK_TIMEOUT_MS && !published) {
+            mqtt_input(&client_ctx);
+            k_sleep(K_MSEC(100));
+        }
 
-    int64_t start_time = k_uptime_get();
-    while (k_uptime_get() - start_time < MQTT_PUB_ACK_TIMEOUT_MS && !published) {
-        mqtt_input(&client_ctx);
-        k_sleep(K_MSEC(100));
+        if(!published){
+            printk("%s MQTT failed to publish (topic: %s) (data: %s)\n",__func__, topic, data);
+            return -1;
+        }
+
     }
 
-    if(!published){
-        printk("%s MQTT failed to publish (topic: %s) (data: %s)\n",__func__, topic, data);
-        return -1;
-    }
 
     return 0;
 
@@ -276,6 +277,8 @@ void mqtt_loop(){
     while(1){
         mqtt_live(&client_ctx);
         mqtt_input(&client_ctx);
-        k_sleep(K_MSEC(100));
+        k_sleep(K_SECONDS(5));
+        k_yield();
+
     }
 }

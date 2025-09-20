@@ -5,7 +5,7 @@
 #include <zephyr/net/mqtt.h>
 #include <arpa/inet.h>
 
-#include "mqtt_interface.h"
+#include "mqtt_pub_cb.h"
 
 
 
