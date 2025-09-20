@@ -15,27 +15,20 @@
 #include "mqtt_pub_cb.h"
 
 // WiFi settings
-#define WIFI_SSID "MagicBE97"
-#define WIFI_PSK "HWTC34AF299D"
+#define WIFI_SSID               CONFIG_WIFI_SSID
+#define WIFI_PSK                CONFIG_WIFI_PSK
 
-#define MQTT_BROKER_IP "192.168.18.85"
-#define MQTT_BROKER_PORT        1883
-#define WIFI_MAX_CONN_ATEMPTS 6 
+#define MQTT_BROKER_IP          CONFIG_MQTT_BROKER_IP
+#define MQTT_BROKER_PORT        CONFIG_MQTT_BROKER_PORT
+#define WIFI_MAX_CONN_ATEMPTS   6 
 
-#define MAX_RANG      520    // Max measurement value in cm
-#define ADC_SOLUTION  1023.0 // ADC resolution (10-bit like Arduino)
 
 const char* topic_arr[] = {"commands/b1"};
 const uint16_t topics_len = ARRAY_SIZE(topic_arr);
 
 
-const char topic_dist[] = "distance";
-
-
 K_THREAD_STACK_DEFINE(network_thread_stack, 2048);
 struct k_thread network_thread;
-
-
 
 void network_thread_func(void *arg1, void *arg2, void *arg3){
 

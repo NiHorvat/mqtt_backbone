@@ -6,14 +6,14 @@
  * 
  * 
 */
-#define MQTT_BROKER_USERNAME    "test"
-#define MQTT_BROKER_PSWD        "1234"
+#define MQTT_BROKER_USERNAME        CONFIG_MQTT_CLIENT_ID
+#define MQTT_BROKER_PSWD            CONFIG_MQTT_BROKER_PASSWORD
 
-#define MQTT_CONN_TIMEOUT_MS 5000
-#define MQTT_PUB_ACK_TIMEOUT_MS 5000
+#define MQTT_CONN_TIMEOUT_MS        CONFIG_MQTT_CONN_TIMEOUT_MS
+#define MQTT_PUB_ACK_TIMEOUT_MS     CONFIG_MQTT_PUB_ACK_TIMEOUT_MS
 
-#define TX_BUFFER_SIZE 256
-#define RX_BUFFER_SIZE 256
+#define TX_BUFFER_SIZE              CONFIG_MQTT_TX_BUFFER_SIZE
+#define RX_BUFFER_SIZE              CONFIG_MQTT_RX_BUFFER_SIZE
 
 /**
  * Is a blocking function -> it is not using any polling

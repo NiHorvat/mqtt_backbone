@@ -1,0 +1,69 @@
+
+config MQTT_BROKER_IP
+	string "MQTT Broker IP address"
+	default ""
+	help
+	  IP address of the MQTT broker to connect to.
+
+
+config MQTT_BROKER_PORT
+	int "MQTT Broker port number"
+	default 1883
+	help
+	  Port number of the MQTT broker.
+
+config MQTT_BROKER_USERNAME
+	string "MQTT Broker Username"
+	default ""
+	help
+	  Username for MQTT broker authentication.
+
+config MQTT_BROKER_PASSWORD
+	string "MQTT Broker Password"
+	default ""
+	help
+	  Password for MQTT broker authentication.
+
+config MQTT_CLIENT_ID
+	string "Client ID"
+	default "zephyr_mqtt_client"
+	help
+	  Client ID used when connecting to the MQTT broker.
+
+config WIFI_SSID
+	string "WiFi SSID"
+	default ""
+	help
+	  SSID of the WiFi network to connect to.
+
+config WIFI_PSK
+	string "WiFi Password"
+	default ""
+	help
+	  Password for the WiFi network.
+
+config MQTT_CONN_TIMEOUT_MS
+	int "MQTT Connection Timeout (ms)"
+	default 5000
+	help
+	  Timeout for MQTT connection establishment in milliseconds.
+
+config MQTT_PUB_ACK_TIMEOUT_MS
+	int "MQTT Publish ACK Timeout (ms)"
+	default 5000
+	help
+	  Timeout for MQTT publish acknowledgment in milliseconds.
+
+config MQTT_TX_BUFFER_SIZE
+	int "MQTT TX Buffer Size"
+	default 256
+	help
+	  Size of the MQTT transmit buffer.
+
+config MQTT_RX_BUFFER_SIZE
+	int "MQTT RX Buffer Size"
+	default 256
+	help
+	  Size of the MQTT receive buffer.
+
+source "Kconfig.zephyr"
